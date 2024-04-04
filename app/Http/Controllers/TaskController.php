@@ -14,6 +14,8 @@ class TaskController extends Controller
      */
     public function index()
     {
+        // dd(request()->query());
+
         $query = Task::query();
 
         $sortField = request("sort_field", "created_at");
