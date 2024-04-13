@@ -5,8 +5,10 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 import { Head, Link, router } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function Index({ auth, projects, queryParams = null }) {
+export default function Index({ auth, projects, queryParams = null, success }) {
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
     if (value) {
@@ -39,21 +41,44 @@ export default function Index({ auth, projects, queryParams = null }) {
     router.get(route("project.index"), queryParams);
   };
 
+  const successNotify = () => {
+    toast.success(success, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
   return (
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          Projects
-        </h2>
+        <div className="flex justify-between">
+          <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+            Projects
+          </h2>
+          <Link
+            href={route("project.create")}
+            className=" py-1 px-4 rounded bg-green-600 hover:bg-green-700 text-white font-semibold"
+          >
+            Add New
+          </Link>
+        </div>
       }
     >
       <Head title="Projects" />
 
+      {success && { successNotify }}
+
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 text-gray-900">
+            <div className="p-6 text-gray-900 overflow-auto">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                   <tr className="text-nowrap">
