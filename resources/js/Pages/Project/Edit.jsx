@@ -6,19 +6,19 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm, Link } from "@inertiajs/react";
 
-export default function CreatePage({ auth }) {
-  const { data, setData, post, errors, reset } = useForm({
+export default function EditPage({ auth, project }) {
+  const { data, setData, put, errors, reset } = useForm({
     image: "",
-    name: "",
-    status: "",
-    description: "",
-    due_date: "",
+    name: project.name || "",
+    status: project.status || "",
+    description: project.description || "",
+    due_date: project.due_date || "",
   });
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    post(route("project.store"));
+    put(route("project.update", project.id));
   };
 
   return (
@@ -28,18 +28,27 @@ export default function CreatePage({ auth }) {
         header={
           <div className="flex justify-between">
             <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-              Add New Project
+              {project.name}
             </h2>
           </div>
         }
       >
-        <Head title="Add Project" />
+        <Head title="Edit Project" />
 
         <div className="py-12">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-              <div className="p-6 text-gray-900 flex flex-col gap-4">
-                <form action="" onSubmit={onSubmit}>
+              <div className="p-6 text-gray-900 ">
+                <form
+                  action=""
+                  onSubmit={onSubmit}
+                  className="flex flex-col gap-4"
+                >
+                  {project.image_path && (
+                    <div className="">
+                      <img src={project.image_path} className="w-64" />
+                    </div>
+                  )}
                   <div className="">
                     <InputLabel
                       htmlFor="project_image_path"
